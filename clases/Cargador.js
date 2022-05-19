@@ -3,15 +3,15 @@ class Cargador extends EventTarget {
     static RESULTADO_OK = "RESULTADO_OK";
     static RESULTADO_ERROR = "RESULTADO_ERROR";
     //
-    opciones = { bubbles:true, cancelable:true};
+    opciones = { bubbles:true, cancelable:true, detail:null};
 
     constructor (opcionesEvento=undefined){
-        super();
-        if (!opcionesEvento) this.opciones = opcionesEvento;
+        super();        
+        if (opcionesEvento) this.opciones = opcionesEvento;
         this.url = "";
         this.formato = "json";
         this.respuesta = "";
-        this.eventoOk = new CustomEvent(Cargador.RESULTADO_OK, this.opciones);
+        
         this.eventoError = new CustomEvent(Cargador.RESULTADO_ERROR, this.opciones);
         this.isOK = false;
     }
@@ -33,6 +33,8 @@ class Cargador extends EventTarget {
                 } else {
                     this.respuesta = data;
                     this.isOK = true;
+                    this.opciones.detail = data;
+                    this.eventoOk = new CustomEvent(Cargador.RESULTADO_OK, this.opciones);
                     this.dispatchEvent(this.eventoOk);
                     //console.log(data);
                 }
@@ -49,13 +51,15 @@ class Cargador extends EventTarget {
 
 /**uso */
 var c = new Cargador();
-c.url = "questions.json";
+c.url = "https://jsonplaceholder.typicode.com/todos/";
+//c.url = "https://swapi.co/api/people/";
 c.addEventListener(Cargador.RESULTADO_OK, onCargar);
 c.addEventListener(Cargador.RESULTADO_ERROR, onErrorCargar);
 c.cargar();
 
 function onCargar(e){
     console.log("OK",c.respuesta);
+    
 }
 function onErrorCargar(e){
     console.error(c.respuesta);
