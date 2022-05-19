@@ -51,7 +51,7 @@ class Cargador extends EventTarget {
 
 /**uso */
 var c = new Cargador();
-c.url = "https://jsonplaceholder.typicode.com/todos/";
+c.url = "mal https://jsonplaceholder.typicode.com/todos/";
 //c.url = "https://swapi.co/api/people/";
 c.addEventListener(Cargador.RESULTADO_OK, onCargar);
 c.addEventListener(Cargador.RESULTADO_ERROR, onErrorCargar);
@@ -62,5 +62,6 @@ function onCargar(e){
     
 }
 function onErrorCargar(e){
-    console.error(c.respuesta);
+    alert(c.respuesta);
+    console.error("ERROR",c.respuesta);
 }
